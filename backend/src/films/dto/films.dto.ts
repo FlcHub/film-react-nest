@@ -1,7 +1,13 @@
 //TODO описать DTO для запросов к /films
 
 export class GetScheduleDto {
-  
+  id: string;
+  daytime: string;
+  hall: number;
+  rows: number;
+  seats: number;
+  price: number;
+  taken: string[]; // { ${row}:${seat}, ... }
 }
 
 export class GetFilmDto {
@@ -14,9 +20,9 @@ export class GetFilmDto {
   title: string;
   about: string;
   description: string;
-  //schedule: GetScheduleDTO[];
+  schedule: GetScheduleDto[];
 } 
 
 export class GetFilmsDto {
-  films: GetFilmDto[];
+  items: GetFilmDto[];
 }

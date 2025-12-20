@@ -12,6 +12,6 @@ export class FilmsController {
 
   @Get(':id/schedule')
   findOne(@Param('id') id: string) {
-    return this.filmsService.findOne(+id);
+    return this.filmsService.findOne(id);
   }
 }

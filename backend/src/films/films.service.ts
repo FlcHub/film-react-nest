@@ -13,7 +13,7 @@ export class FilmsService {
     return await this.filmsRepository.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} film`;
+  async findOne(id: string) {
+    return await this.filmsRepository.findOne(id);
   }
 }

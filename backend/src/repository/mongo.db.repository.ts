@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { AppConfig } from '../app.config.provider';
-import { GetFilmDto, GetFilmsDto } from '../films/dto/films.dto';
+import { GetFilmDto, GetFilmsDto, GetScheduleDto } from '../films/dto/films.dto';
 
 import  mongoose, {Mongoose} from "mongoose";
 import { FilmsRepository } from './films.repository';
@@ -15,6 +15,15 @@ const FilmSchema = new mongoose.Schema({
   title: { type: String, required: true },
   about: { type: String, required: true },
   description: { type: String, required: true },
+  schedule: { type: [{
+    id: { type: String, required: true },
+    daytime: { type: String, required: true },
+    hall: { type: String, required: true },
+    rows: { type: Number, required: true },
+    seats: { type: Number, required: true },
+    price: { type: Number, required: true },
+    taken: { type: Array<String>, required: true },
+  }], required: true }, // тут тоже не понятно
 });
 
 const Film = mongoose.model('films', FilmSchema);
@@ -24,6 +33,18 @@ export default Film;
 @Injectable()
 export class FilmsMongoDbRepository implements FilmsRepository {
   constructor(@Inject('CONFIG') private config: AppConfig) {}
+
+  private getScheduleMapperFn(): (schedule) => GetScheduleDto {
+    return (schedule) => ({
+      id: schedule.id,
+      daytime: schedule.string,
+      hall: schedule.hall,
+      rows: schedule.rows,
+      seats: schedule.seats,
+      price: schedule.price,
+      taken: schedule.taken,
+    });
+  }
 
   private getFilmMapperFn(): (film) => GetFilmDto {
     return (film) => {
@@ -37,15 +58,20 @@ export class FilmsMongoDbRepository implements FilmsRepository {
         title: film.title,
         about: film.about,
         description: film.description,
+        schedule: film.schedule.map(this.getScheduleMapperFn()),
       };
     };
   }
 
   async findAll(): Promise<GetFilmsDto> {
     const films = await Film.find({});
-    console.log('Here! ^^');
     return {
-        films: films.map(this.getFilmMapperFn())
+        items: films.map(this.getFilmMapperFn())
     };
+  }
+
+  async findOne(id: string): Promise<GetFilmDto> {
+    const film = await Film.findOne({ id });
+    return this.getFilmMapperFn()(film);
   }
 }
