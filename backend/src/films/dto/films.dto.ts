@@ -21,8 +21,12 @@ export class GetFilmDto {
   about: string;
   description: string;
   schedule: GetScheduleDto[];
-} 
+}
 
 export class GetFilmsDto {
   items: GetFilmDto[];
+}
+
+export class GetSchedulesDto {
+  items: GetScheduleDto[];
 }
