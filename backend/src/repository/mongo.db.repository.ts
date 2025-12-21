@@ -6,7 +6,7 @@ import {
   GetScheduleDto,
   GetSchedulesDto,
 } from '../films/dto/films.dto';
-import { PostOrderDto } from '../order/dto/order.dto';
+import { PostOrderDto, PostOrdersResDto } from '../order/dto/order.dto';
 
 import mongoose from 'mongoose';
 import { FilmsRepository } from './films.repository';
@@ -126,7 +126,7 @@ export class FilmsMongoDbRepository implements FilmsRepository {
     };
   }
 
-  async createOrder(orders: PostOrderDto[]): Promise<PostOrderDto[]> {
+  async createOrder(orders: PostOrderDto[]): Promise<PostOrdersResDto> {
     const sessions = new Map<string, TMongooseSchedule>();
     console.log(orders);
     // найти все сеансы и проверить доступность мест
@@ -179,6 +179,9 @@ export class FilmsMongoDbRepository implements FilmsRepository {
       );
     }
 
-    return orders;
+    return {
+      total: orders.length,
+      items: orders,
+    };
   }
 }

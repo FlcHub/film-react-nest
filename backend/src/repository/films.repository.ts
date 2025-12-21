@@ -1,8 +1,8 @@
-import { PostOrderDto } from '../order/dto/order.dto';
+import { PostOrderDto, PostOrdersResDto } from '../order/dto/order.dto';
 import { GetFilmsDto, GetSchedulesDto } from '../films/dto/films.dto';
 
 export interface FilmsRepository {
   findAll(): Promise<GetFilmsDto>;
   findOne(id: string): Promise<GetSchedulesDto>;
-  createOrder(orders: PostOrderDto[]): Promise<PostOrderDto[]>;
+  createOrder(orders: PostOrderDto[]): Promise<PostOrdersResDto>;
 }

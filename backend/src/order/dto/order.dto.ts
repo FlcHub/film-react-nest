@@ -12,3 +12,8 @@ export class PostOrderDto {
 export class PostOrdersDto {
   tickets: PostOrderDto[];
 }
+
+export class PostOrdersResDto {
+  total: number;
+  items: PostOrderDto[];
+}
