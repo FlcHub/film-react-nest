@@ -123,15 +123,6 @@ export class FilmsMongoDbRepository implements FilmsRepository {
     return {
       total: film.schedule.length,
       items: film.schedule.map(this.getScheduleMapperFn()),
-      id: film.id,
-      rating: film.rating,
-      director: film.director,
-      tags: film.tags,
-      image: film.image,
-      cover: film.cover,
-      title: film.title,
-      about: film.about,
-      description: film.description,
     };
   }
 
