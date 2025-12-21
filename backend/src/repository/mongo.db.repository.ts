@@ -26,7 +26,7 @@ const FilmSchema = new mongoose.Schema({
       {
         id: { type: String, required: true },
         daytime: { type: String, required: true },
-        hall: { type: String, required: true },
+        hall: { type: Number, required: true },
         rows: { type: Number, required: true },
         seats: { type: Number, required: true },
         price: { type: Number, required: true },
@@ -47,7 +47,7 @@ type TMongooseSchedule = mongoose.Types.Subdocument<
   {
     id: string;
     daytime: string;
-    hall: string;
+    hall: number;
     rows: number;
     seats: number;
     price: number;
@@ -56,7 +56,7 @@ type TMongooseSchedule = mongoose.Types.Subdocument<
 > & {
   id: string;
   daytime: string;
-  hall: string;
+  hall: number;
   rows: number;
   seats: number;
   price: number;
