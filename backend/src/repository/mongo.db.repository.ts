@@ -128,7 +128,6 @@ export class FilmsMongoDbRepository implements FilmsRepository {
 
   async createOrder(orders: PostOrderDto[]): Promise<PostOrdersResDto> {
     const sessions = new Map<string, TMongooseSchedule>();
-    console.log(orders);
     // найти все сеансы и проверить доступность мест
     for (const order of orders) {
       const film = await Film.findOne(
@@ -172,7 +171,6 @@ export class FilmsMongoDbRepository implements FilmsRepository {
     // бронируем наконец-то
     for (const [key, session] of sessions) {
       const [film, session_id] = key.split(':');
-      console.log(film, session_id, session.taken);
       await Film.updateOne(
         { id: film, 'schedule.id': session_id },
         { $set: { 'schedule.$.taken': session.taken } },

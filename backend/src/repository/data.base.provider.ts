@@ -15,6 +15,6 @@ export const databaseProvider = {
       return new FilmsMongoDbRepository(config);
     }
   },
-  // можем указать зависимости, которые нужны для функции-фабрики
+  // указать зависимости, которые нужны для функции-фабрики
   inject: ['CONFIG'],
 };
