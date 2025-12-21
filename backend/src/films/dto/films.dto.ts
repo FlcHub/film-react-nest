@@ -24,9 +24,11 @@ export class GetFilmDto {
 }
 
 export class GetFilmsDto {
+  total: number;
   items: GetFilmDto[];
 }
 
 export class GetSchedulesDto {
+  total: number;
   items: GetScheduleDto[];
 }

@@ -96,6 +96,7 @@ export class FilmsMongoDbRepository implements FilmsRepository {
   async findAll(): Promise<GetFilmsDto> {
     const films = await Film.find({});
     return {
+        total: films.length,
         items: films.map(this.getFilmMapperFn()),
     };
   }
@@ -106,6 +107,7 @@ export class FilmsMongoDbRepository implements FilmsRepository {
       throw new HttpException('Фильм не найден', HttpStatus.NOT_FOUND);
     }
     return {
+      total: film.schedule.length,
       items: film.schedule.map(this.getScheduleMapperFn()),
     };
   }
