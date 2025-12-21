@@ -1,4 +1,4 @@
-import mongoose, { Mongoose } from 'mongoose';
+import mongoose from 'mongoose';
 
 export class DatabaseConnection {
   constructor(private options: { url: string; driver: string }) {

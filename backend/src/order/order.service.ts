@@ -4,9 +4,7 @@ import { PostOrderDto } from './dto/order.dto';
 
 @Injectable()
 export class OrderService {
-  constructor(
-    @Inject('DATABASE') private filmsRepository: FilmsRepository,
-  ) {}
+  constructor(@Inject('DATABASE') private filmsRepository: FilmsRepository) {}
 
   createOrder(postOrdersDto: PostOrderDto[]) {
     return this.filmsRepository.createOrder(postOrdersDto);

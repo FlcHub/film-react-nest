@@ -3,9 +3,7 @@ import { FilmsRepository } from '../repository/films.repository';
 
 @Injectable()
 export class FilmsService {
-  constructor(
-    @Inject('DATABASE') private filmsRepository: FilmsRepository,
-  ) {}
+  constructor(@Inject('DATABASE') private filmsRepository: FilmsRepository) {}
 
   async findAll() {
     return await this.filmsRepository.findAll();

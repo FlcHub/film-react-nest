@@ -1,5 +1,5 @@
 import { PostOrderDto } from '../order/dto/order.dto';
-import { GetFilmDto, GetFilmsDto, GetSchedulesDto } from '../films/dto/films.dto';
+import { GetFilmsDto, GetSchedulesDto } from '../films/dto/films.dto';
 
 export interface FilmsRepository {
   findAll(): Promise<GetFilmsDto>;

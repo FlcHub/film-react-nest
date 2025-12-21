@@ -8,13 +8,13 @@ export const databaseProvider = {
     const options = {
       url: config.database.url,
       driver: config.database.driver,
-    }
-    const connection = new DatabaseConnection(options);
+    };
+    new DatabaseConnection(options);
 
     if (options.driver === 'mongodb') {
       return new FilmsMongoDbRepository(config);
     }
   },
   // можем указать зависимости, которые нужны для функции-фабрики
-  inject: ['CONFIG']
-}
+  inject: ['CONFIG'],
+};
