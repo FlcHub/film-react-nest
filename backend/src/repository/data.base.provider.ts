@@ -4,7 +4,10 @@ import { FilmsMongoDbRepository } from './mongo.db.repository';
 
 export const databaseProvider = {
   provide: FilmsRepository,
-  useFactory: (config: AppConfig, mongooseRepository: FilmsMongoDbRepository) => {
+  useFactory: (
+    config: AppConfig,
+    mongooseRepository: FilmsMongoDbRepository,
+  ) => {
     const options = {
       url: config.database.url,
       driver: config.database.driver,

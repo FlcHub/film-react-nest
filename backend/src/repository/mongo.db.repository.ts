@@ -1,7 +1,11 @@
 import { Model } from 'mongoose';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Film, getFilmMapperFn, getScheduleMapperFn, Schedule } from '../films/schemas/films.mongoose.schema';
+import {
+  Film,
+  getFilmMapperFn,
+  getScheduleMapperFn,
+} from '../films/schemas/films.mongoose.schema';
 import {
   GetFilmsDto,
   GetScheduleDto,
@@ -35,12 +39,12 @@ export class FilmsMongoDbRepository extends FilmsRepository {
     };
   }
 
-  async findSession(film_id: string, session_id: string): Promise<GetScheduleDto> {
+  async findSession(
+    film_id: string,
+    session_id: string,
+  ): Promise<GetScheduleDto> {
     const film = await this.filmModel
-      .findOne(
-        { id: film_id, 'schedule.id': session_id },
-        { 'schedule.$': 1 },
-      )
+      .findOne({ id: film_id, 'schedule.id': session_id }, { 'schedule.$': 1 })
       .exec();
     if (!film) {
       throw new HttpException('Сеанс не найден', HttpStatus.NOT_FOUND);
@@ -48,7 +52,10 @@ export class FilmsMongoDbRepository extends FilmsRepository {
     return getScheduleMapperFn()(film.schedule[0]);
   }
 
-  async updateSessionTaken(film_id: string, schedule: GetScheduleDto): Promise<boolean> {
+  async updateSessionTaken(
+    film_id: string,
+    schedule: GetScheduleDto,
+  ): Promise<boolean> {
     await this.filmModel
       .updateOne(
         { id: film_id, 'schedule.id': schedule.id },

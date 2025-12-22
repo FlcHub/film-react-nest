@@ -9,11 +9,14 @@ export class OrderService {
 
   async createOrder(postOrdersDto: PostOrderDto[]) {
     const sessions = new Map<string, GetScheduleDto>();
-    
+
     // найти все сеансы и проверить доступность мест
     for (const order of postOrdersDto) {
-      const session = await this.filmsRepository.findSession(order.film, order.session);
-      
+      const session = await this.filmsRepository.findSession(
+        order.film,
+        order.session,
+      );
+
       if (
         session.taken.find((el) => el === `${order.row}:${order.seat}`) ||
         order.row > session.rows ||
@@ -24,7 +27,7 @@ export class OrderService {
           HttpStatus.BAD_REQUEST,
         );
       }
-      
+
       const s = sessions.get(`${order.film}:${order.session}`);
       if (s) {
         s.taken.push(`${order.row}:${order.seat}`);
@@ -44,16 +47,16 @@ export class OrderService {
         );
       }
     }
-    
+
     // бронируем наконец-то
     for (const [key, session] of sessions) {
-      const [film,] = key.split(':');
+      const [film] = key.split(':');
       await this.filmsRepository.updateSessionTaken(film, session);
     }
 
     return {
       total: postOrdersDto.length,
       items: postOrdersDto,
-    }
+    };
   }
 }
