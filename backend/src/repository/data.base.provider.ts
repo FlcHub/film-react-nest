@@ -1,20 +1,19 @@
 import { AppConfig } from '../app.config.provider';
-import { DatabaseConnection } from './data.base.connection';
+import { FilmsRepository } from './films.repository';
 import { FilmsMongoDbRepository } from './mongo.db.repository';
 
 export const databaseProvider = {
-  provide: 'DATABASE',
-  useFactory: (config: AppConfig) => {
+  provide: FilmsRepository,
+  useFactory: (config: AppConfig, mongooseRepository: FilmsMongoDbRepository) => {
     const options = {
       url: config.database.url,
       driver: config.database.driver,
     };
-    new DatabaseConnection(options);
 
     if (options.driver === 'mongodb') {
-      return new FilmsMongoDbRepository(config);
+      return mongooseRepository;
     }
   },
   // указать зависимости, которые нужны для функции-фабрики
-  inject: ['CONFIG'],
+  inject: ['CONFIG', FilmsMongoDbRepository],
 };
