@@ -1,19 +1,22 @@
 import { Schedule } from './schedule.entity';
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryColumn, Column, OneToMany } from 'typeorm';
 
-@Entity()
+@Entity('films')
 export class Film {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryColumn()
+  id: string;
   
   @Column({ type: 'double precision' })
-  rating: string;
+  rating: number;
 
   @Column({ type: 'varchar' })
   director: string;
 
-  @Column({ type: 'text' })
-  tags: string;
+  @Column({
+    type: process.env.DATABASE_DRIVER === 'mongodb' ? 'array' : 'text',
+    array: process.env.DATABASE_DRIVER === 'mongodb' ? true : false,
+  })
+  tags: string[];
 
   @Column({ type: 'varchar' })
   image: string;
@@ -32,5 +35,5 @@ export class Film {
 
   // каждому фильму соответствует несколько сеансов
   @OneToMany(() => Schedule, schedule => schedule.film)
-  schedules: Schedule[];
+  schedule: Schedule[];
 }

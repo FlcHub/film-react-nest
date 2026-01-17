@@ -23,7 +23,7 @@ import { OrderModule } from './order/order.module';
     }),
     FilmsModule,
     OrderModule,
-    // @todo: Добавьте раздачу статических файлов из public
+    // раздача статических файлов из public
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public', 'content', 'afisha'),
       serveRoot: '/content/afisha',

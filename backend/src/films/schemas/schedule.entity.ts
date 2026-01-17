@@ -1,10 +1,10 @@
 import { Film } from './film.entity';
 import { Entity, Column, ManyToOne, JoinColumn, PrimaryColumn } from 'typeorm';
 
-@Entity()
+@Entity('schedules')
 export class Schedule {
   @PrimaryColumn()
-  id: number;
+  id: string;
   
   @Column({ type: 'varchar' })
   daytime: string;
@@ -21,11 +21,14 @@ export class Schedule {
   @Column({ type: 'double precision' })
   price: number;
 
-  @Column({ type: 'text' })
-  taken: number;
+  @Column({
+    type: process.env.DATABASE_DRIVER === 'mongodb' ? 'array' : 'text',
+    array: process.env.DATABASE_DRIVER === 'mongodb' ? true : false,
+  })
+  taken: string[];
 
   // каждому сеансу соответствует один фильм
-  @ManyToOne(() => Film, film => film.schedules)
+  @ManyToOne(() => Film, film => film.schedule)
   @JoinColumn({ name: 'filmId' })
   film: Film;
 }

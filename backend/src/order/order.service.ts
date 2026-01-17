@@ -1,11 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { FilmsRepository } from '../repository/films.repository';
+import { FilmsMongoDbRepository } from '../repository/mongo.db.repository';
 import { PostOrderDto } from './dto/order.dto';
 import { GetScheduleDto } from '../films/dto/films.dto';
 
 @Injectable()
 export class OrderService {
-  constructor(private filmsRepository: FilmsRepository) {}
+  constructor(private filmsRepository: FilmsMongoDbRepository) {}
 
   async createOrder(postOrdersDto: PostOrderDto[]) {
     const sessions = new Map<string, GetScheduleDto>();

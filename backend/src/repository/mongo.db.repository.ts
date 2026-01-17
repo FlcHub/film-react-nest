@@ -12,13 +12,9 @@ import {
   GetSchedulesDto,
 } from '../films/dto/films.dto';
 
-import { FilmsRepository } from './films.repository';
-
 @Injectable()
-export class FilmsMongoDbRepository extends FilmsRepository {
-  constructor(@InjectModel('films') private readonly filmModel: Model<Film>) {
-    super();
-  }
+export class FilmsMongoDbRepository {
+  constructor(@InjectModel('films') private readonly filmModel: Model<Film>) {}
 
   async findAll(): Promise<GetFilmsDto> {
     const films = await this.filmModel.find().exec();
