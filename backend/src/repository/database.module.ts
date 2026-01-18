@@ -12,7 +12,7 @@ import { Schedule } from '../films/schemas/schedule.entity';
       type:
         (process.env.DATABASE_DRIVER as 'mongodb' | 'postgres') || 'postgres',
       host: 'localhost',
-      port: parseInt(process.env.DATABASE_PORT) || 3000,
+      port: parseInt(process.env.DATABASE_PORT) || 5432,
       username: process.env.DATABASE_USERNAME,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME || 'public',
