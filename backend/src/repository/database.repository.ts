@@ -38,11 +38,9 @@ export class DatabaseRepository {
     if (!film) {
       throw new HttpException('Фильм не найден', HttpStatus.NOT_FOUND);
     }
-    console.log(film);
-    console.log(film.schedule);
     return {
       total: film.schedule.length,
-      items: film.schedule.map(getScheduleMapperFn()),
+      items: film.schedule.map(getScheduleMapperFn()).sort((a, b) => a.daytime.getTime() - b.daytime.getTime()),
     };
   }
 
@@ -57,7 +55,6 @@ export class DatabaseRepository {
     if (!session) {
       throw new HttpException('Сеанс не найден', HttpStatus.NOT_FOUND);
     }
-    console.log('session ->', session);
     return getScheduleMapperFn()(session);
   }
 

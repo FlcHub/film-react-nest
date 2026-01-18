@@ -40,7 +40,7 @@ export function getScheduleMapperFn(): (schedule: Schedule) => GetScheduleDto {
       rows: schedule.rows,
       seats: schedule.seats,
       price: schedule.price,
-      taken: schedule.taken.split(','),
+      taken: schedule.taken ? schedule.taken.split(',') : [],
     };
   };
 }

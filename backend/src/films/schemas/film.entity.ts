@@ -42,13 +42,13 @@ export function getFilmMapperFn(): (film: Film) => GetFilmDto {
       id: film.id,
       rating: film.rating,
       director: film.director,
-      tags: film.tags.split(','),
+      tags: film.tags ? film.tags.split(',') : [],
       image: film.image,
       cover: film.cover,
       title: film.title,
       about: film.about,
       description: film.description,
-      schedule: film.schedule.map(getScheduleMapperFn()),
+      schedule: film.schedule.map(getScheduleMapperFn()).sort((a, b) => a.daytime.getTime() - b.daytime.getTime()),
     };
   };
 }
