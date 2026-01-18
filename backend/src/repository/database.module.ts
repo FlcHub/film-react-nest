@@ -9,7 +9,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
   imports: [
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         host: '127.0.0.1',
         port: +configService.get<number>('DATABASE_PORT'),
@@ -19,7 +20,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         entities: [Film, Schedule],
         synchronize: false,
       }),
-      inject: [ConfigService],
     }),
     TypeOrmModule.forFeature([Film, Schedule]),
   ],
