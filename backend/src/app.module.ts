@@ -12,7 +12,6 @@ import { FilmsDatabaseModule } from './repository/database.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      cache: true,
     }),
     FilmsDatabaseModule,
     FilmsModule,
