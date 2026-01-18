@@ -7,24 +7,21 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Film]),
-    TypeOrmModule.forFeature([Schedule]),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
-        type:
-          (configService.get<string>('DATABASE_DRIVER') as 'postgres') ||
-          'postgres',
-        host: 'localhost',
-        port: configService.get<number>('DATABASE_PORT') || 5432,
+        type: configService.get<string>('DATABASE_DRIVER', 'postgres') as 'postgres',
+        host: configService.get<string>('DATABASE_HOST'),
+        port: configService.get<number>('DATABASE_PORT', 5432),
         username: configService.get<string>('DATABASE_USERNAME'),
         password: configService.get<string>('DATABASE_PASSWORD'),
-        database: configService.get<string>('DATABASE_NAME') || 'prac',
+        database: configService.get<string>('DATABASE_NAME'),
         entities: [Film, Schedule],
         synchronize: false,
       }),
     }),
+    TypeOrmModule.forFeature([Film, Schedule]),
   ],
   providers: [DatabaseRepository],
   exports: [DatabaseRepository],
