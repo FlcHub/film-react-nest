@@ -11,11 +11,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         type: configService.get<string>('DATABASE_DRIVER', 'postgres') as 'postgres',
-        host: 'localhost',
-        port: 5432,
-        username: configService.get<string>('DATABASE_USERNAME', 'prac'),
-        password: configService.get<string>('DATABASE_PASSWORD', 'prac'),
-        database: 'prac',
         entities: [Film, Schedule],
         synchronize: false,
       }),
