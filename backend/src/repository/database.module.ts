@@ -15,7 +15,7 @@ import { Schedule } from '../films/schemas/schedule.entity';
       port: parseInt(process.env.DATABASE_PORT) || 3000,
       username: process.env.DATABASE_USERNAME,
       password: process.env.DATABASE_PASSWORD,
-      database: 'prac',
+      database: process.env.DATABASE_NAME || 'public',
       entities: [Film, Schedule],
       synchronize: false,
     }),
