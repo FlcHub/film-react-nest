@@ -40,7 +40,9 @@ export class DatabaseRepository {
     }
     return {
       total: film.schedule.length,
-      items: film.schedule.map(getScheduleMapperFn()).sort((a, b) => a.daytime.getTime() - b.daytime.getTime()),
+      items: film.schedule
+        .map(getScheduleMapperFn())
+        .sort((a, b) => a.daytime.getTime() - b.daytime.getTime()),
     };
   }
 

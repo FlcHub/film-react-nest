@@ -48,7 +48,9 @@ export function getFilmMapperFn(): (film: Film) => GetFilmDto {
       title: film.title,
       about: film.about,
       description: film.description,
-      schedule: film.schedule.map(getScheduleMapperFn()).sort((a, b) => a.daytime.getTime() - b.daytime.getTime()),
+      schedule: film.schedule
+        .map(getScheduleMapperFn())
+        .sort((a, b) => a.daytime.getTime() - b.daytime.getTime()),
     };
   };
 }
