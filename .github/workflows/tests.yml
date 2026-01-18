@@ -34,6 +34,13 @@ jobs:
         node-version: 18.x
     - name: Get testing lib
       run: set -eu && git clone --depth 1 $REP_TESTS $DIR_TESTS
+    - name: Sanitize env for newman (no broken IP/proxy)
+      run: |
+        echo "LOCAL_ADDRESS=127.0.0.1" >> $GITHUB_ENV
+        echo "HTTP_PROXY=" >> $GITHUB_ENV
+        echo "HTTPS_PROXY=" >> $GITHUB_ENV
+        echo "ALL_PROXY=" >> $GITHUB_ENV
+        echo "NO_PROXY=localhost,127.0.0.1" >> $GITHUB_ENV
     - name: Start project
       run: bash $DIR_TESTS/bin/start_project.sh
     - name: Run tests
