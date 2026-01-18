@@ -10,10 +10,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        type: configService.get('DATABASE_DRIVER'),
+        type: 'postgres',
         url: configService.get<string>('DATABASE_URL'),
         username: configService.get<string>('DATABASE_USERNAME'),
         password: configService.get<string>('DATABASE_PASSWORD'),
+        database: configService.get<string>('DATABASE_NAME'),
         entities: [Film, Schedule],
         synchronize: false,
       }),
