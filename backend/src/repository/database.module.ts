@@ -12,11 +12,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        host: '127.0.0.1',
+        host: configService.get<string>('DATABASE_HOST') ?? '127.0.0.1',
         port: +configService.get<number>('DATABASE_PORT'),
         username: configService.get<string>('DATABASE_USERNAME'),
         password: configService.get<string>('DATABASE_PASSWORD'),
-        database: 'afisha',
+        database: configService.get<string>('DATABASE_NAME') ?? 'afisha',
         entities: [Film, Schedule],
         synchronize: false,
       }),
