@@ -8,17 +8,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         type: configService.get<string>('DATABASE_DRIVER', 'postgres') as 'postgres',
-        host: 'localhost',
-        port: 5432,
-        username: configService.get<string>('DATABASE_USERNAME', 'postgres'),
-        password: configService.get<string>('DATABASE_PASSWORD', 'postgres'),
-        database: configService.get<string>('DATABASE_NAME', 'films'),
+        url: configService.get<string>('DATABASE_URL', 'postgres://localhost:5432/prac'),
+        username: configService.get<string>('DATABASE_USERNAME', 'prac'),
+        password: configService.get<string>('DATABASE_PASSWORD', 'prac'),
         entities: [Film, Schedule],
-        autoLoadEntities: true,
-        synchronize: true,
+        synchronize: false,
       }),
       inject: [ConfigService],
     }),
