@@ -6,7 +6,7 @@ import { Entity, PrimaryColumn, Column, OneToMany } from 'typeorm';
 export class Film {
   @PrimaryColumn()
   id: string;
-  
+
   @Column({ type: 'double precision' })
   rating: number;
 
@@ -21,18 +21,18 @@ export class Film {
 
   @Column({ type: 'varchar' })
   cover: string;
-  
+
   @Column({ type: 'varchar' })
   title: string;
-  
+
   @Column({ type: 'varchar' })
   about: string;
-  
+
   @Column({ type: 'varchar' })
   description: string;
 
   // каждому фильму соответствует несколько сеансов
-  @OneToMany(() => Schedule, schedule => schedule.film)
+  @OneToMany(() => Schedule, (schedule) => schedule.film)
   schedule: Schedule[];
 }
 

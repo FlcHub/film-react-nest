@@ -8,8 +8,6 @@ export const configProvider = {
   },
 };
 
-export interface AppConfig {
-}
+export interface AppConfig {}
 
-export interface AppConfigDatabase {
-}
+export interface AppConfigDatabase {}

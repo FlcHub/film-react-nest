@@ -6,10 +6,10 @@ import { Entity, Column, ManyToOne, JoinColumn, PrimaryColumn } from 'typeorm';
 export class Schedule {
   @PrimaryColumn()
   id: string;
-  
+
   @Column({ type: 'varchar' })
   daytime: string;
-  
+
   @Column({ type: 'integer' })
   hall: number;
 
@@ -26,7 +26,7 @@ export class Schedule {
   taken: string;
 
   // каждому сеансу соответствует один фильм
-  @ManyToOne(() => Film, film => film.schedule)
+  @ManyToOne(() => Film, (film) => film.schedule)
   @JoinColumn({ name: 'filmId' })
   film: Film;
 }

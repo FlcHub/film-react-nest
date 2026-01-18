@@ -1,8 +1,11 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Film, getFilmMapperFn } from '../films/schemas/film.entity';
-import { Schedule, getScheduleMapperFn } from '../films/schemas/schedule.entity';
+import {
+  Schedule,
+  getScheduleMapperFn,
+} from '../films/schemas/schedule.entity';
 
 import {
   GetFilmsDto,
@@ -13,7 +16,6 @@ import {
 @Injectable()
 export class DatabaseRepository {
   constructor(
-    private dataSource: DataSource,
     @InjectRepository(Film)
     private readonly filmRepository: Repository<Film>,
     @InjectRepository(Schedule)
@@ -25,13 +27,13 @@ export class DatabaseRepository {
     return {
       total: films.length,
       items: films.map(getFilmMapperFn()),
-    }
+    };
   }
 
   async findOne(id: string): Promise<GetSchedulesDto> {
     const film = await this.filmRepository.findOne({
       where: { id },
-      relations: ['schedule']
+      relations: ['schedule'],
     });
     if (!film) {
       throw new HttpException('Фильм не найден', HttpStatus.NOT_FOUND);
@@ -43,13 +45,13 @@ export class DatabaseRepository {
       items: film.schedule.map(getScheduleMapperFn()),
     };
   }
-  
+
   async findSession(
     film_id: string,
     session_id: string,
   ): Promise<GetScheduleDto> {
     const session = await this.scheduleRepository.findOne({
-      where: { id: session_id, film: { id: film_id} },
+      where: { id: session_id, film: { id: film_id } },
       relations: ['film'],
     });
     if (!session) {
@@ -58,7 +60,7 @@ export class DatabaseRepository {
     console.log('session ->', session);
     return getScheduleMapperFn()(session);
   }
-  
+
   async updateSessionTaken(
     film_id: string,
     schedule: GetScheduleDto,
