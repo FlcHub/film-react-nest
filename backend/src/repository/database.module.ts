@@ -13,10 +13,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       useFactory: async (configService: ConfigService) => ({
         type: configService.get<string>('DATABASE_DRIVER', 'postgres') as 'postgres',
         host: 'localhost',
-        port: configService.get<number>('DATABASE_PORT', 5432),
+        port: 5432,
         username: configService.get<string>('DATABASE_USERNAME'),
         password: configService.get<string>('DATABASE_PASSWORD'),
-        database: 'prac',
+        database: 'films',
         entities: [Film, Schedule],
         synchronize: false,
       }),
