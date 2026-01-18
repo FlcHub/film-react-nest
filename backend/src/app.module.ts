@@ -6,6 +6,7 @@ import { join } from 'path';
 import { configProvider } from './app.config.provider';
 import { FilmsModule } from './films/films.module';
 import { OrderModule } from './order/order.module';
+import { FilmsDatabaseModule } from './repository/database.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { OrderModule } from './order/order.module';
       isGlobal: true,
       cache: true,
     }),
+    FilmsDatabaseModule,
     FilmsModule,
     OrderModule,
     // раздача статических файлов из public
