@@ -9,17 +9,17 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
   imports: [
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get<string>('DATABASE_HOST') ?? '127.0.0.1',
-        port: +configService.get<number>('DATABASE_PORT'),
-        username: configService.get<string>('DATABASE_USERNAME'),
-        password: configService.get<string>('DATABASE_PASSWORD'),
-        database: configService.get<string>('DATABASE_NAME') ?? 'afisha',
+      useFactory: async (configService: ConfigService) => ({
+        type: configService.get<string>('DATABASE_DRIVER', 'postgres') as 'postgres',
+        host: 'localhost',
+        port: 5432,
+        username: configService.get<string>('DATABASE_USERNAME', 'prac'),
+        password: configService.get<string>('DATABASE_PASSWORD', 'prac'),
+        database: 'prac',
         entities: [Film, Schedule],
         synchronize: false,
       }),
+      inject: [ConfigService],
     }),
     TypeOrmModule.forFeature([Film, Schedule]),
   ],
