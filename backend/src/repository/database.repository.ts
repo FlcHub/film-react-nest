@@ -1,58 +1,27 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Film } from '../films/schemas/film.entity';
-import { Schedule } from '../films/schemas/schedule.entity';
+import { Film, getFilmMapperFn } from '../films/schemas/film.entity';
+import { Schedule, getScheduleMapperFn } from '../films/schemas/schedule.entity';
 
 import {
-  GetFilmDto,
   GetFilmsDto,
   GetScheduleDto,
   GetSchedulesDto,
 } from '../films/dto/films.dto';
 
-function getScheduleMapperFn(): (schedule: Schedule) => GetScheduleDto {
-  return (schedule) => {
-    return {
-      id: schedule.id,
-      daytime: new Date(schedule.daytime),
-      hall: schedule.hall,
-      rows: schedule.rows,
-      seats: schedule.seats,
-      price: schedule.price,
-      taken: schedule.taken,
-    };
-  };
-}
-
-function getFilmMapperFn(): (film: Film) => GetFilmDto {
-  return (film) => {
-    return {
-      id: film.id,
-      rating: film.rating,
-      director: film.director,
-      tags: film.tags,
-      image: film.image,
-      cover: film.cover,
-      title: film.title,
-      about: film.about,
-      description: film.description,
-      schedule: film.schedule.map(getScheduleMapperFn()),
-    };
-  };
-}
-
 @Injectable()
 export class DatabaseRepository {
   constructor(
+    private dataSource: DataSource,
     @InjectRepository(Film)
     private readonly filmRepository: Repository<Film>,
+    @InjectRepository(Schedule)
+    private readonly scheduleRepository: Repository<Schedule>,
   ) {}
 
   async findAll(): Promise<GetFilmsDto> {
     const films = await this.filmRepository.find({ relations: ['schedule'] });
-    console.log(films);
-    console.log(films[0].schedule);
     return {
       total: films.length,
       items: films.map(getFilmMapperFn()),
@@ -60,14 +29,52 @@ export class DatabaseRepository {
   }
 
   async findOne(id: string): Promise<GetSchedulesDto> {
-    const film = await  this.filmRepository.findOneBy({ id });
+    const film = await this.filmRepository.findOne({
+      where: { id },
+      relations: ['schedule']
+    });
     if (!film) {
       throw new HttpException('Фильм не найден', HttpStatus.NOT_FOUND);
     }
+    console.log(film);
     console.log(film.schedule);
     return {
       total: film.schedule.length,
       items: film.schedule.map(getScheduleMapperFn()),
     };
+  }
+  
+  async findSession(
+    film_id: string,
+    session_id: string,
+  ): Promise<GetScheduleDto> {
+    const session = await this.scheduleRepository.findOne({
+      where: { id: session_id, film: { id: film_id} },
+      relations: ['film'],
+    });
+    if (!session) {
+      throw new HttpException('Сеанс не найден', HttpStatus.NOT_FOUND);
+    }
+    console.log('session ->', session);
+    return getScheduleMapperFn()(session);
+  }
+  
+  async updateSessionTaken(
+    film_id: string,
+    schedule: GetScheduleDto,
+  ): Promise<boolean> {
+    const result = await this.scheduleRepository
+      .createQueryBuilder()
+      .update(Schedule)
+      .set({ taken: schedule.taken.join(',') })
+      .where('id = :id', { id: schedule.id })
+      .andWhere('filmId = :film_id', { film_id: film_id })
+      .execute();
+
+    if (result.affected === 0) {
+      throw new HttpException('Сеанс не найден', HttpStatus.NOT_FOUND);
+    }
+
+    return true;
   }
 }

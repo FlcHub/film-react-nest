@@ -1,4 +1,5 @@
-import { Schedule } from './schedule.entity';
+import { GetFilmDto } from '../dto/films.dto';
+import { getScheduleMapperFn, Schedule } from './schedule.entity';
 import { Entity, PrimaryColumn, Column, OneToMany } from 'typeorm';
 
 @Entity('films')
@@ -12,11 +13,8 @@ export class Film {
   @Column({ type: 'varchar' })
   director: string;
 
-  @Column({
-    type: process.env.DATABASE_DRIVER === 'mongodb' ? 'array' : 'text',
-    array: process.env.DATABASE_DRIVER === 'mongodb' ? true : false,
-  })
-  tags: string[];
+  @Column({ type: 'text' })
+  tags: string;
 
   @Column({ type: 'varchar' })
   image: string;
@@ -36,4 +34,21 @@ export class Film {
   // каждому фильму соответствует несколько сеансов
   @OneToMany(() => Schedule, schedule => schedule.film)
   schedule: Schedule[];
+}
+
+export function getFilmMapperFn(): (film: Film) => GetFilmDto {
+  return (film) => {
+    return {
+      id: film.id,
+      rating: film.rating,
+      director: film.director,
+      tags: film.tags.split(','),
+      image: film.image,
+      cover: film.cover,
+      title: film.title,
+      about: film.about,
+      description: film.description,
+      schedule: film.schedule.map(getScheduleMapperFn()),
+    };
+  };
 }

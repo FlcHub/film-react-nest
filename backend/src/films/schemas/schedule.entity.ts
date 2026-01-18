@@ -1,3 +1,4 @@
+import { GetScheduleDto } from '../dto/films.dto';
 import { Film } from './film.entity';
 import { Entity, Column, ManyToOne, JoinColumn, PrimaryColumn } from 'typeorm';
 
@@ -21,14 +22,25 @@ export class Schedule {
   @Column({ type: 'double precision' })
   price: number;
 
-  @Column({
-    type: process.env.DATABASE_DRIVER === 'mongodb' ? 'array' : 'text',
-    array: process.env.DATABASE_DRIVER === 'mongodb' ? true : false,
-  })
-  taken: string[];
+  @Column({ type: 'text' })
+  taken: string;
 
   // каждому сеансу соответствует один фильм
   @ManyToOne(() => Film, film => film.schedule)
   @JoinColumn({ name: 'filmId' })
   film: Film;
+}
+
+export function getScheduleMapperFn(): (schedule: Schedule) => GetScheduleDto {
+  return (schedule) => {
+    return {
+      id: schedule.id,
+      daytime: new Date(schedule.daytime),
+      hall: schedule.hall,
+      rows: schedule.rows,
+      seats: schedule.seats,
+      price: schedule.price,
+      taken: schedule.taken.split(','),
+    };
+  };
 }

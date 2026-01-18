@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { OrderController } from './order.controller';
-import { FilmsMongoDbModule } from '../repository/mongo.db.module';
+import { FilmsDatabaseModule } from '../repository/database.module';
 
 @Module({
-  imports: [FilmsMongoDbModule],
+  imports: [FilmsDatabaseModule],
   controllers: [OrderController],
   providers: [OrderService],
 })

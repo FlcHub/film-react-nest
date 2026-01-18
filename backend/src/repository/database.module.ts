@@ -7,10 +7,9 @@ import { Schedule } from '../films/schemas/schedule.entity';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Film]),
-    TypeOrmModule.forFeature([Module]),
+    TypeOrmModule.forFeature([Schedule]),
     TypeOrmModule.forRoot({
       type: (process.env.DATABASE_DRIVER as 'mongodb' | 'postgres') || 'postgres',
-      url: process.env.DATABASE_URL || 'mongodb://localhost:27017/prac',
       host: 'localhost',
       port: parseInt(process.env.DATABASE_PORT) || 5432,
       username: process.env.DATABASE_USERNAME,
