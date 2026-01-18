@@ -8,14 +8,21 @@ import { ConfigService } from '@nestjs/config';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
-      useFactory: async (configService: ConfigService) => ({
-        type: configService.get('DATABASE_DRIVER'),
-        url: configService.get<string>('DATABASE_URL'),
-        username: configService.get<string>('DATABASE_USERNAME'),
-        password: configService.get<string>('DATABASE_PASSWORD'),
-        entities: [Film, Schedule],
-        synchronize: false,
-      }),
+      useFactory: async (configService: ConfigService) => {
+        const databaseUrl = configService.get<string>('DATABASE_URL');
+        const url = new URL(databaseUrl);
+
+        return {
+          type: configService.get('DATABASE_DRIVER') as 'postgres',
+          host: url.hostname ?? 'localhost',
+          post: Number(url.port) || 5432,
+          username: configService.get<string>('DATABASE_USERNAME'),
+          password: configService.get<string>('DATABASE_PASSWORD'),
+          database: url.pathname.slice(1),
+          entities: [Film, Schedule],
+          synchronize: false,
+        }
+      },
       inject: [ConfigService],
     }),
     TypeOrmModule.forFeature([Film, Schedule]),
