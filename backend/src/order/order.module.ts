@@ -1,13 +1,11 @@
 import { Module } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { OrderController } from './order.controller';
-import { configProvider } from '../app.config.provider';
-import { databaseProvider } from '../repository/data.base.provider';
-import { FilmsMongoDbModule } from '../repository/mongo.db.module';
+import { FilmsDatabaseModule } from '../repository/database.module';
 
 @Module({
-  imports: [FilmsMongoDbModule],
+  imports: [FilmsDatabaseModule],
   controllers: [OrderController],
-  providers: [configProvider, databaseProvider, OrderService],
+  providers: [OrderService],
 })
 export class OrderModule {}
