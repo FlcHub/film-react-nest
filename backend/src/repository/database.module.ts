@@ -11,13 +11,9 @@ import { ConfigService } from '@nestjs/config';
       useFactory: async (configService: ConfigService) => {
         const databaseUrl = configService.get<string>('DATABASE_URL');
         const url = new URL(databaseUrl);
-        const hostname = url.hostname; // || 'localhost';
-        const port = Number(url.port); // || 5432;
-        const database = url.pathname.slice(1); // || 'prac';
-        // console.log(url);
-        // console.log('--> ', hostname);
-        // console.log('--> ', port);
-        // console.log('--> ', database);
+        const hostname = url.hostname || 'localhost';
+        const port = Number(url.port) || 5432;
+        const database = url.pathname.slice(1) || 'prac';
 
         return {
           type: configService.get('DATABASE_DRIVER') as 'postgres',
@@ -28,7 +24,7 @@ import { ConfigService } from '@nestjs/config';
           database: database,
           entities: [Film, Schedule],
           synchronize: false,
-        }
+        };
       },
       inject: [ConfigService],
     }),
