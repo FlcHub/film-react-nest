@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { JsonLogger } from './json.logger';
 
-describe('JsonLogger', () => {
+describe('JsonLogger: function calls', () => {
   let logger: JsonLogger;
   
   let spyLog: jest.SpyInstance;
@@ -58,6 +58,14 @@ describe('JsonLogger', () => {
 
     haveBeenCalledTimes(0, 0, 1);
     expect(console.error).toHaveBeenCalledWith(expect.stringContaining(message));
+  });
+});
+
+describe('JsonLogger: format messages', () => {
+  let logger: JsonLogger;
+
+  beforeEach(async () => {
+    logger = new JsonLogger();
   });
   
   it('should create a correctly formated message (without optionalParams)', () => {

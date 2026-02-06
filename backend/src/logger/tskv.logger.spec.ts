@@ -1,13 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TskvLogger } from './tskv.logger';
 
-describe('TskvLogger', () => {
+describe('TskvLogger: function calls', () => {
   let logger: TskvLogger;
 
   let spyLog: jest.SpyInstance;
   let spyWarn: jest.SpyInstance;
   let spyError: jest.SpyInstance;
-
+  
   // логгер использует Date().toISOString(), можно замокировать его, чтобы не мешало проверке формата лога
   let spyDate: jest.SpyInstance;
 
@@ -18,13 +18,13 @@ describe('TskvLogger', () => {
   afterAll(async () => {
     spyDate.mockRestore();
   });
-
+  
   beforeEach(async () => {
+    logger = new TskvLogger();
+
     spyLog = jest.spyOn(console, 'log');
     spyWarn = jest.spyOn(console, 'warn');
     spyError = jest.spyOn(console, 'error');
-    
-    logger = new TskvLogger();
 
     // переопределить вывод в консоль, чтобы не спамить лишнего во время тестов
     spyLog.mockImplementation(() => 'fn() log: mocked implementation');
@@ -69,6 +69,25 @@ describe('TskvLogger', () => {
 
     haveBeenCalledTimes(0, 0, 1);
     expect(console.error).toHaveBeenCalledWith(logger.formatMessage('error', message));
+  });
+});
+
+describe('TskvLogger: format messages', () => {
+  let logger: TskvLogger;
+
+  // логгер использует Date().toISOString(), можно замокировать его, чтобы не мешало проверке формата лога
+  let spyDate: jest.SpyInstance;
+
+  beforeAll(async () => {
+    spyDate = jest.spyOn(Date.prototype, 'toISOString').mockReturnValue('timestamp');
+  });
+
+  afterAll(async () => {
+    spyDate.mockRestore();
+  });
+
+  beforeEach(async () => {
+    logger = new TskvLogger();
   });
   
   it('should create a correctly formated message (without optionalParams)', () => {
