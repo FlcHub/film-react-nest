@@ -1,9 +1,8 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { JsonLogger } from './json.logger';
 
 describe('JsonLogger: function calls', () => {
   let logger: JsonLogger;
-  
+
   let spyLog: jest.SpyInstance;
   let spyWarn: jest.SpyInstance;
   let spyError: jest.SpyInstance;
@@ -12,7 +11,7 @@ describe('JsonLogger: function calls', () => {
     spyLog = jest.spyOn(console, 'log');
     spyWarn = jest.spyOn(console, 'warn');
     spyError = jest.spyOn(console, 'error');
-    
+
     logger = new JsonLogger();
 
     // переопределить вывод в консоль, чтобы не спамить лишнего во время тестов
@@ -27,14 +26,18 @@ describe('JsonLogger: function calls', () => {
     spyError.mockRestore();
   });
 
-  const haveBeenCalledTimes = (logTimes: number, warnTimes: number, errorTimes: number) => {
+  const haveBeenCalledTimes = (
+    logTimes: number,
+    warnTimes: number,
+    errorTimes: number,
+  ) => {
     expect(console.log).toHaveBeenCalledTimes(logTimes);
     expect(console.warn).toHaveBeenCalledTimes(warnTimes);
     expect(console.error).toHaveBeenCalledTimes(errorTimes);
-  }
+  };
 
   it('should call console.log', () => {
-    const message = "someLog";
+    const message = 'someLog';
 
     logger.log(message);
 
@@ -43,8 +46,8 @@ describe('JsonLogger: function calls', () => {
   });
 
   it('should call console.warn', () => {
-    const message = "someWarning";
-    
+    const message = 'someWarning';
+
     logger.warn(message);
 
     haveBeenCalledTimes(0, 1, 0);
@@ -52,12 +55,14 @@ describe('JsonLogger: function calls', () => {
   });
 
   it('should call console.error', () => {
-    const message = "someError";
-    
+    const message = 'someError';
+
     logger.error(message);
 
     haveBeenCalledTimes(0, 0, 1);
-    expect(console.error).toHaveBeenCalledWith(expect.stringContaining(message));
+    expect(console.error).toHaveBeenCalledWith(
+      expect.stringContaining(message),
+    );
   });
 });
 
@@ -67,7 +72,7 @@ describe('JsonLogger: format messages', () => {
   beforeEach(async () => {
     logger = new JsonLogger();
   });
-  
+
   it('should create a correctly formated message (without optionalParams)', () => {
     const message = 'message';
     const expectMessage = {
@@ -81,20 +86,21 @@ describe('JsonLogger: format messages', () => {
 
     expect(parsedMessage).toEqual(expectMessage);
   });
-  
+
   it('should create a correctly formated message (with optionalParams)', () => {
     const message = 'message';
     const expectMessage = {
       level: 'log',
       message: 'message',
-      optionalParams: [
-        { key1: 'value1' },
-        { key2: 'value2' },
-      ],
+      optionalParams: [{ key1: 'value1' }, { key2: 'value2' }],
     };
 
-    const formatedMessage = logger.formatMessage('log', message,
-      { key1: 'value1' }, { key2: 'value2' });
+    const formatedMessage = logger.formatMessage(
+      'log',
+      message,
+      { key1: 'value1' },
+      { key2: 'value2' },
+    );
     const parsedMessage = JSON.parse(formatedMessage);
 
     expect(parsedMessage).toEqual(expectMessage);
