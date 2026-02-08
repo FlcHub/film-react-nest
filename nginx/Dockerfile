@@ -1,6 +1,7 @@
 # nginx
 FROM nginx:alpine
 
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY ./nginx/sites-available/birds.hub.nomorepartiessbs.ru /etc/nginx/sites-available/birds.hub.nomorepartiessbs.ru
+RUN ln -s /etc/nginx/sites-available/birds.hub.nomorepartiessbs.ru /etc/nginx/sites-enabled/
 
 EXPOSE 80
