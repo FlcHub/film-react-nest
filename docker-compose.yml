@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  frontend:
+    image: "film_frontend" # образ будет называться frontend_build
+    env_file: ./frontend/.env # в окружение контейнера попадут переменные из файла .env
+    build: 
+      context: ./frontend # директория сборки (контекст)
+    volumes:
+      - frontend-dist:/usr/src/app/dist
+    networks:
+      - app-network
+
+  nginx:
+    image: "film_nginx" # образ будет называться frontend_build
+    build:
+      context: ./nginx
+    volumes:
+      - frontend-dist:/usr/share/nginx/html
+    ports:
+      - "80:80"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  frontend-dist:
