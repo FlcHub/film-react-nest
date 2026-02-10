@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   frontend:
-    image: "film_frontend" # образ будет называться film_frontend
+    image: "ghcr.io/flchub/film-react-nest/film_frontend:latest" # образ будет называться film_frontend
     env_file: ./frontend/.env # в окружение контейнера попадут переменные из файла .env
     build:
       context: ./frontend # директория сборки (контекст)
@@ -35,7 +35,7 @@ services:
       timeout: 5s
   
   backend:
-    image: "film_backend"
+    image: "ghcr.io/flchub/film-react-nest/film_backend:latest"
     env_file: ./backend/.env
     build:
       context: ./backend
@@ -46,7 +46,7 @@ services:
         condition: service_healthy
 
   nginx:
-    image: "film_nginx"
+    image: "ghcr.io/flchub/film-react-nest/film_nginx:latest"
     build:
       context: ./nginx
     volumes:

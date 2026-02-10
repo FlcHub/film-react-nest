@@ -34,7 +34,10 @@ jobs:
             context: ./frontend # где конкретно фронтенд
             file: ./frontend/Dockerfile
             push: true
-            tags: ghcr.io/${{ env.REPOSITORY }}/film_frontend:${{ github.sha }}
+            tags: ghcr.io/${{ env.REPOSITORY }}/film_frontend:latest
+            build-args: |
+              VITE_API_URL=${{ env.VITE_API_URL }}
+              VITE_CDN_URL=${{ env.VITE_CDN_URL }}
         
         # сборка образа для бэкенда
         - name: Build and push Docker images
@@ -43,7 +46,15 @@ jobs:
             context: ./backend # где конкретно бэкенд
             file: ./backend/Dockerfile
             push: true
-            tags: ghcr.io/${{ env.REPOSITORY }}/film_backend:${{ github.sha }}
+            tags: ghcr.io/${{ env.REPOSITORY }}/film_backend:latest
+            build-args: |
+              DATABASE_DRIVER=${{ secrets.DATABASE_DRIVER }}
+              DATABASE_URL=${{ secrets.DATABASE_URL }}
+              DEBUG=${{ secrets.DEBUG }}
+              DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}
+              DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}
+              DATABASE_NAME=${{ secrets.DATABASE_NAME }}
+              LOGGER_TYPE=${{ secrets.LOGGER_TYPE }}
         
         # сборка образа для nginx
         - name: Build and push nginx Docker image
@@ -52,4 +63,4 @@ jobs:
             context: ./nginx
             file: ./nginx/Dockerfile
             push: true
-            tags: ghcr.io/${{ env.REPOSITORY }}/film_nginx:${{ github.sha }}
+            tags: ghcr.io/${{ env.REPOSITORY }}/film_nginx:latest
