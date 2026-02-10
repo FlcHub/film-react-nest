@@ -1,5 +1,4 @@
 env:
-  REPOSITORY: ${{ github.repository | toLowerCase }}
   REGISTRY: ghcr.io
 
 name: publish
@@ -23,6 +22,10 @@ jobs:
         # видимо, это что-то, что просто нужно сделать (возможно, какой-то инструмент для дальнейшей сборки докер-образов)
         - name: Set up Docker Buildx
           uses: docker/setup-buildx-action@v3
+
+        - name: Convert repository name to lowercase
+          id: repo_lower
+          run: echo "REPOSITORY=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
         # сборка образа для фронта
         - name: Build and push Docker images
