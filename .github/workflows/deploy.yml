@@ -17,7 +17,7 @@ jobs:
           with:
             registry: ${{ env.REGISTRY }} # конкретный Docker-реестр - GHCR
             username: ${{ github.actor }} # данные для авторизации в реестре
-            password: ${{ secrets.GITHUB_TOKEN }}
+            password: ${{ secrets.CR_PAT }}
 
         # видимо, это что-то, что просто нужно сделать (возможно, какой-то инструмент для дальнейшей сборки докер-образов)
         - name: Set up Docker Buildx
