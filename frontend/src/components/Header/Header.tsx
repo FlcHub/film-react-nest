@@ -16,7 +16,6 @@ export function Header({ counter, onClick }: HeaderProps) {
                     alt="Film! logo"
                 />
             </a>
-            <span>Проверочка!</span>
             <button className={styles.basket} onClick={onClick}>
                 <span className={styles.counter}>{counter}</span>
             </button>

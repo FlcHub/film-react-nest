@@ -1,4 +1,5 @@
 env:
+  REPOSITORY: flchub
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
@@ -31,7 +32,7 @@ jobs:
             context: ./frontend # где конкретно фронтенд
             file: ./frontend/Dockerfile
             push: true
-            tags: ghcr.io/${{ github.repository_owner }}/film_frontend:${{ github.sha }}
+            tags: ghcr.io/${{ env.REPOSITORY }}/film_frontend:${{ github.sha }}
         
         # сборка образа для бэкенда
         - name: Build and push Docker images
@@ -40,7 +41,7 @@ jobs:
             context: ./backend # где конкретно бэкенд
             file: ./backend/Dockerfile
             push: true
-            tags: ghcr.io/${{ github.repository_owner }}/film_backend:${{ github.sha }}
+            tags: ghcr.io/${{ env.REPOSITORY }}/film_backend:${{ github.sha }}
         
         # сборка образа для nginx
         - name: Build and push nginx Docker image
@@ -49,4 +50,4 @@ jobs:
             context: ./nginx
             file: ./nginx/Dockerfile
             push: true
-            tags: ghcr.io/${{ github.repository_owner }}/film_nginx:${{ github.sha }}
+            tags: ghcr.io/${{ env.REPOSITORY }}/film_nginx:${{ github.sha }}
