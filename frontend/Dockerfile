@@ -12,3 +12,12 @@ RUN npm install @rollup/rollup-linux-x64-musl
 COPY . .
 
 RUN npm run build
+
+# совсем уменьшает размер образа...
+FROM node:20-alpine AS frontend_release
+
+WORKDIR /usr/src/app
+
+COPY --from=frontend_build /usr/src/app/dist /usr/src/app/dist
+
+CMD ["sh", "-c", "tail -f /dev/null"]
