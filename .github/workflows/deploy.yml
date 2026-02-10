@@ -1,7 +1,6 @@
 env:
-  REPOSITORY: flchub
+  REPOSITORY: ${{ github.repository | toLowerCase }}
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
 
 name: publish
 on: [push]
