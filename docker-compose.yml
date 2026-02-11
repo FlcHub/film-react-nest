@@ -1,0 +1,89 @@
+version: "3.9"
+
+services:
+  frontend:
+    image: "ghcr.io/flchub/film-react-nest/film_frontend:latest" # образ будет называться film_frontend
+    env_file: ./frontend/.env # в окружение контейнера попадут переменные из файла .env
+    build:
+      context: ./frontend # директория сборки (контекст)
+    volumes:
+      - frontend-dist:/usr/src/app/dist # !если снова возникнет ошибка: перезапуск докера в случае чего может помочь?..
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "test", "-f", "/usr/src/app/dist/index.html"]  # проверяем, что index.html существует
+      interval: 30s
+      retries: 5
+      start_period: 10s
+      timeout: 10s
+    restart: unless-stopped
+  
+  postgres:
+    image: "postgres:16"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${DATABASE_USERNAME}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${DATABASE_NAME}
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USERNAME} -d ${DATABASE_NAME}"]
+      interval: 10s
+      retries: 5
+      start_period: 15s
+      timeout: 5s
+    restart: unless-stopped
+  
+  backend:
+    image: "ghcr.io/flchub/film-react-nest/film_backend:latest"
+    env_file: ./backend/.env
+    build:
+      context: ./backend
+    networks:
+      - app-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  nginx:
+    image: "ghcr.io/flchub/film-react-nest/film_nginx:latest"
+    build:
+      context: ./nginx
+    volumes:
+      - frontend-dist:/usr/share/nginx/html
+    ports:
+      - "3000:80"
+    networks:
+      - app-network
+    depends_on:
+      frontend:
+        condition: service_healthy
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}
+    ports:
+      - "8080:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - app-network
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  frontend-dist:
+  postgres-data:
+  pgadmin-data:

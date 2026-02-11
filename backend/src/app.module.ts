@@ -7,12 +7,14 @@ import { configProvider } from './app.config.provider';
 import { FilmsModule } from './films/films.module';
 import { OrderModule } from './order/order.module';
 import { FilmsDatabaseModule } from './repository/database.module';
+import { LoggerModule } from './logger/logger.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    LoggerModule,
     FilmsDatabaseModule,
     FilmsModule,
     OrderModule,
