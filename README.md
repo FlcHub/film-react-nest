@@ -1,5 +1,7 @@
 # FILM!
 
+Приложение доступно по ссылке http://birds.hub.nomorepartiessbs.ru/.
+
 ## Установка
 
 ### MongoDB

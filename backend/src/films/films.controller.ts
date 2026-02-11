@@ -7,6 +7,7 @@ export class FilmsController {
 
   @Get()
   findAll() {
+    console.log('asfjhafilhrilwhALL');
     return this.filmsService.findAll();
   }
 
